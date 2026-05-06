@@ -15,7 +15,7 @@ resource "azurerm_network_interface" "main" {
     name                          = "${each.key}-nic"
     subnet_id                     = "/subscriptions/9e27705f-e28f-4f14-9137-ef3f4f8924af/resourceGroups/Test/providers/Microsoft.Network/virtualNetworks/Monolith-vnet/subnets/default"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.main.id
+    public_ip_address_id          = azurerm_public_ip.main[each.key].id
   }
 }
 
@@ -25,7 +25,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                  = "${each.key}"
   location              = var.location
   resource_group_name = var.resource_group_name
-  network_interface_ids = [azurerm_network_interface.main.id]
+  network_interface_ids = [azurerm_network_interface.main[each.key].id]
   size               = each.value
 
   # Uncomment this line to delete the data disks automatically when deleting the VM
@@ -57,5 +57,5 @@ resource "azurerm_dns_a_record" "main" {
   zone_name           = "vinaykumar.online"
   resource_group_name = var.resource_group_name
   ttl                 = 30
-  records             = [azurerm_network_interface.main.private_ip_address]
+  records             = [azurerm_network_interface.main[each.key].private_ip_address]
 }
