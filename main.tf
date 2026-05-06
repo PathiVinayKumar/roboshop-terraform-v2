@@ -15,7 +15,6 @@ resource "azurerm_network_interface" "main" {
     name                          = "${each.key}-nic"
     subnet_id                     = "/subscriptions/9e27705f-e28f-4f14-9137-ef3f4f8924af/resourceGroups/Test/providers/Microsoft.Network/virtualNetworks/Monolith-vnet/subnets/default"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.main[each.key].id
   }
 }
 
